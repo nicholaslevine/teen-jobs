@@ -1,5 +1,7 @@
 const {Router} = require('express');
 require('dotenv').config();
+const userController = require('../controllers/userController');
+
 const userRouter = Router();
 
 userRouter.get('/', userController.getJobOffers);
