@@ -18,6 +18,7 @@ model Teen{
 }
 model Job{
   id Int @id @default(autoincrement())
+  name String
   description String
   taken Boolean
   providerId String
@@ -27,6 +28,8 @@ model Job{
 }
 model Provider{
   id String @id @default(cuid())
+  username String @db.VarChar(255)
+  password String
   name String
   description String
   jobs Job[]

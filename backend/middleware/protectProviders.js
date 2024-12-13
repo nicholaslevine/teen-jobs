@@ -2,36 +2,37 @@ const prisma = require('../db/prisma');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+
 async function protect(req, res, next){
     try {
         const token = req.cookies.jwt;
 
-        if(!token){
-            return res.status(404).json({error: "Unauthorized"})
-        }
+        if (!token){
+            return res.status(404).json({error: "Unathorized"});
+        };
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        const user = await prisma.teen.findUnique({
+        const provider = await prisma.provider.findUnique({
             where: {
-                id: decoded.userId
+                id: decoded.providerId
             },
             select: {
                 id: true,
-                fullName: true,
+                name: true,
                 username: true,
-                description: true,
                 jobs: true,
+                description: true,
             }
         });
 
-        if (!user){
+        if (!provider) {
             return res.status(404).json({error: "User not found"});
-        };
+        }
 
         req.user = user;
         next();
-
+        
     } catch (error) {
         if (error instanceof jwt.TokenExpiredError){
             res.status(401).json({error: "Unathorized, Token Expired"});

@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const generateUserToken = require('../utils/generateUserToken');
 
 const userController = {
-    getJobOffers: async (req, res) => {
+    getJobOffers: async (req, res, next) => {
         try {
             const availableJobs = await prisma.job.findMany({
                 where: {
@@ -18,7 +18,7 @@ const userController = {
             res.status(500).json({error: "Internal server error"});
         }
     },
-    createUser: async (req, res) => {
+    createUser: async (req, res, next) => {
         try {
         const {fullName, username, password, description} = req.body;
 
@@ -55,14 +55,14 @@ const userController = {
             return res.status(201).json(newUser);
         }
         else {
-            return res.status(400).json("Invalid data types");
+            return res.status(400).json({error: "Invalid data types"});
         }     
         } catch (error) {
             console.error("Error when creating user", error);
             next(error);
         }
     },
-    login: async (req, res) => {
+    login: async (req, res, next) => {
         try {
             const {username, password} = req.body;
 
@@ -131,6 +131,38 @@ const userController = {
             
         } catch (error) {
             console.log("Error getting user info", error);
+            next(error);
+        }
+    },
+    addJob: async (req, res, next) => {
+        try {
+            const {jobId} = req.params;
+            const userId = req.user.id;
+
+            const job = await prisma.job.findUnique({
+                where: {
+                    id: jobId,
+                    taken: false,
+                }
+            });
+
+            if (!job){
+                return res.status(404).json({error: "Job not found or already taken"});
+            };
+
+            const updatedJob = await prisma.job.update({
+                where: {id: jobId},
+                data: {
+                    taken: true,
+                    teen: {
+                        connect: {id : userId}
+                    }
+                }
+            });
+
+            return res.status(200).json(updatedJob);
+        } catch (error) {
+            console.error("error adding job", error);
             next(error);
         }
     }

@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const providerRouter = new Router();
+const providerController = require('../controllers/providerController');
 
 
 providerRouter.post('/login', providerController.login);
