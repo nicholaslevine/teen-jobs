@@ -115,6 +115,12 @@ const providerController = {
             const myJobOffers = await prisma.job.findMany({
                 where: {
                     providerId: req.user.id
+                },
+                select: {
+                    name: true,
+                    taken: true,
+                    description: true,
+                    teen: true
                 }
             });
             if (!myJobOffers){
@@ -134,6 +140,29 @@ const providerController = {
             return res.status(200).json("Logged out successfully");
         } catch (error) {
             console.log("Error logging out", error);
+            next(error);
+        }
+    },
+    info: async (req, res, next) => {
+        try {
+            const userInfo = await prisma.provider.findUnique({
+                where: {
+                    id: req.user.id,
+                }
+            });
+
+            if (userInfo) {
+                return res.status(200).json({
+                    id: userInfo.id,
+                    name: userInfo.name,
+                    username: userInfo.username,
+                    description: userInfo.description
+                })
+            } else{
+                return res.status(404).json({error: "User not found"});
+            }
+        } catch (error) {
+            console.error("Error getting user info", error.message);
             next(error);
         }
     }
