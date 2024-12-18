@@ -1,17 +1,18 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useProviderContext } from "../../context/providerContext";
-import { create } from "istanbul-reports";
 
 
 
 function useCreateJob(){
     const [loading, setLoading] = useState(false);
-    const {provider, setProvider} = useProviderContext();
 
     const createJob = async (jobData) => {
         setLoading(true);
         try {
+
+            if (!jobData.name || !jobData.description){
+                throw new Error("Please fill out all fields")
+            }
             const res = await fetch("/api/provider/create", {
                 method: "POST",
                 headers: {

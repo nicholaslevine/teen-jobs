@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useProviderContext } from "../../context/providerContext";
 import toast from "react-hot-toast";
 
-const useLogout = () => {
+const useProviderLogout = () => {
     const [loading, setLoading] = useState(false);
     const {setProvider} = useProviderContext();
 
@@ -28,4 +28,4 @@ const useLogout = () => {
     return {loading, logout}
 }
 
-export default useLogout;
+export default useProviderLogout;

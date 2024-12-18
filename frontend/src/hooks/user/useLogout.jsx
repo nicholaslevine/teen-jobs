@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import useUserContext from "../../context/userContext";
 
 
-function useLogout(){
+function useUserLogout(){
     const [loading, setLoading] = useState(false);
     const {setUser} = useUserContext();
 
@@ -30,4 +30,4 @@ function useLogout(){
     return {loading, logout};
 }
 
-export default useLogout;
+export default useUserLogout;

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import useSignup from "../../hooks/user/useSignup";
+import useSignup from "../../hooks/provider/useSignup";
 import Header from "../../components/Header";
 
 function Signup() {
    const [inputs, setInputs] = useState({
-       fullName: "",
+       name: "",
        username: "", 
        password: "",
        description: ""
@@ -79,7 +79,7 @@ function Signup() {
                                htmlFor="fullName" 
                                className="block text-sm font-medium text-gray-700 mb-2"
                            >
-                               Full Name
+                            Name
                            </label>
                            <input 
                                type="text"
@@ -87,7 +87,7 @@ function Signup() {
                                id="fullName"
                                required
                                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                               onChange={(e) => setInputs({...inputs, fullName: e.target.value})}
+                               onChange={(e) => setInputs({...inputs, name: e.target.value})}
                            />
                        </div>
 
@@ -119,7 +119,7 @@ function Signup() {
 
                    <p className="mt-6 text-center text-sm text-gray-600">
                        Already have an account?{' '}
-                       <a href="/user/login" className="font-medium text-blue-600 hover:text-blue-500">
+                       <a href="/provider/login" className="font-medium text-blue-600 hover:text-blue-500">
                            Log in
                        </a>
                    </p>
