@@ -1,4 +1,5 @@
 import { createContext, useEffect, useContext, useState } from "react";
+import toast from "react-hot-toast"; // Don't forget to import toast
 
 const UserContext = createContext({
     user: null,
@@ -11,35 +12,38 @@ export const UserContextProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
 
     const getUser = async () => {
-        const res = await fetch('/api/user/info');
-        const data = await res.json();
-    try {
-        if (!res.ok) {
-            throw new Error(data.error)
-        } else {
-            setUser(data);
-        }
-    } catch (error) {
-        console.error(error);
-        toast.error(error.message);
-    } finally {
-        setLoading(false);
-    }
+        try {
+            const res = await fetch('/api/user/info');
+            const data = await res.json();
 
-}
+            if (!res.ok) {
+                throw new Error(data.error)
+            } else {
+                setUser(data);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
     
     useEffect(() => {
         getUser();
     }, []);
 
-    return <UserContext.Provider value={{
-        user,
-        loading,
-        setUser
-    }}>{children}</UserContext.Provider>
+    return (
+        <UserContext.Provider value={{
+            user,
+            loading,
+            setUser
+        }}>
+            {children}
+        </UserContext.Provider>
+    );
 }
 
-
 export const useUserContext = () => {
-    useContext(UserContext)
+    return useContext(UserContext);
 }
