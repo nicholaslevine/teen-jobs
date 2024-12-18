@@ -27,7 +27,7 @@ function useGetJobs(){
     }
 
     useEffect(() => {
-        useGetJobs();
+        getJobs();
     }, []);
 
     return {jobs, loading}

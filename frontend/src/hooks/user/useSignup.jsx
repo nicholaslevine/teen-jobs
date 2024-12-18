@@ -1,10 +1,12 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useUserContext from "../../context/userContext";
+import { useNavigate } from "react-router-dom";
 
 function useSignup(){
     const [loading, setLoading] = useState(false);
     const {setUser} = useUserContext();
+    const navigate = useNavigate();
     async function signup(userData){
 
         if (!userData.fullName || !userData.username || !userData.password || !userData.description){
@@ -29,6 +31,7 @@ function useSignup(){
             }
 
             setUser(data);
+            navigate("/user")
         } catch (error) {
             toast.error(error.message);
         } finally {
