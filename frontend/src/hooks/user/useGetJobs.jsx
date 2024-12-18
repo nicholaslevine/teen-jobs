@@ -1,23 +1,24 @@
+import { useEffect } from "react";
 import { useState } from "react";
-import { useProviderContext } from "../../context/providerContext";
 import toast from "react-hot-toast";
 
-const useLogout = () => {
-    const [loading, setLoading] = useState(false);
-    const {setProvider} = useProviderContext();
 
-    const logout = async () => {
+function useGetJobs(){
+    const [loading, setLoading] = useState(false);
+    const [jobs, setJobs] = useState([]);
+
+    async function getJobs(){
         setLoading(true);
         try {
-            const res = await fetch("/api/provider/logout", {
-                method: "POST"
-            });
+            const res = await fetch("/api/user");
             const data = await res.json();
 
-            if (!res.ok) {
+            if (!res.ok){
                 throw new Error(data.error);
             }
-            setProvider(null);
+
+            setJobs(jobs);
+
         } catch (error) {
             toast.error(error.message);
         } finally {
@@ -25,7 +26,10 @@ const useLogout = () => {
         }
     }
 
-    return {loading, logout}
-}
+    useEffect(() => {
+        useGetJobs();
+    }, []);
 
-export default useLogout;
+    return {jobs, loading}
+}
+export default useGetJobs;

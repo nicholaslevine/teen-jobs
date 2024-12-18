@@ -1,5 +1,5 @@
 import { createContext, useEffect, useContext, useState } from "react";
-import toast from "react-hot-toast"; // Don't forget to import toast
+import toast from "react-hot-toast"; 
 
 const UserContext = createContext({
     user: null,
@@ -47,3 +47,4 @@ export const UserContextProvider = ({children}) => {
 export const useUserContext = () => {
     return useContext(UserContext);
 }
+export default useUserContext;

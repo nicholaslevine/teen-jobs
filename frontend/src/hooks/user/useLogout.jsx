@@ -1,31 +1,33 @@
 import { useState } from "react";
-import { useProviderContext } from "../../context/providerContext";
 import toast from "react-hot-toast";
+import useUserContext from "../../context/userContext";
 
-const useLogout = () => {
+
+function useLogout(){
     const [loading, setLoading] = useState(false);
-    const {setProvider} = useProviderContext();
+    const {setUser} = useUserContext();
 
-    const logout = async () => {
+    async function logout(){
         setLoading(true);
         try {
-            const res = await fetch("/api/provider/logout", {
-                method: "POST"
+            const res = await fetch("/api/user/logout", {
+                method: "post"
             });
+
             const data = await res.json();
 
             if (!res.ok) {
                 throw new Error(data.error);
             }
-            setProvider(null);
+
+            setUser(null);
         } catch (error) {
             toast.error(error.message);
         } finally {
             setLoading(false);
         }
     }
-
-    return {loading, logout}
+    return {loading, logout};
 }
 
 export default useLogout;

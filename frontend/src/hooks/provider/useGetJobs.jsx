@@ -9,7 +9,7 @@ const useGetJobs = () => {
     async function getJobs(){
         setLoading(true);
         try {
-            const res = await fetch("/api/provider/create");
+            const res = await fetch("/api/provider/");
             const data = await res.json();
             
             if (!res.ok) {
